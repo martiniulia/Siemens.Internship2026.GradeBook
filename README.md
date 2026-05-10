@@ -6,19 +6,19 @@ This document provides a detailed breakdown of the SOLID principle violations id
 
 ## 1. Single Responsibility Principle (SRP)
 
-### Violation A: `ItemController`
+### Violation 1: `ItemController`
 - **Location**: `Controllers/ItemController.cs` (Methods: `GetAll`, `GetById`)
 - **Description**: The controller was responsible for three distinct concerns:
     1.  **Request Handling**: Managing HTTP verbs and routes.
     2.  **Business Logic**: Calculating statistics (`totalCount`, `averageValue`).
     3.  **Logging**: Writing directly to the console (`Console.WriteLine`).
-- **Why it's a violation**: A controller should only be responsible for orchestrating the flow between the user and the service layer. Mixing business logic and logging makes the class harder to test and maintain.
+- **Why it's a violation**: A controller should only be responsible for managing the interaction between the user and the service layer. Mixing business logic and logging makes the class harder to test and maintain.
 - **Applied Fix**: 
     - Created `GradeService` to handle the statistics calculation logic.
     - Replaced `Console.WriteLine` with the standard `ILogger<GradeController>` abstraction.
     - The controller now only delegates tasks to the service layer.
 
-### Violation B: `ItemRepository`
+### Violation 2: `ItemRepository`
 - **Location**: `Repositories/ItemRepository.cs`
 - **Description**: The repository contained unused state (`_nextId`) and lacked a clear responsibility for data initialization or persistence.
 - **Why it's a violation**: A repository should have a single responsibility: providing an abstraction over data access.
@@ -33,11 +33,11 @@ This document provides a detailed breakdown of the SOLID principle violations id
 
 - **Location**: `Controllers/ItemController.cs` (Method: `GetAll`)
 - **Description**: The statistics calculation was hardcoded directly inside the `GetAll` action.
-- **Why it's a violation**: If a requirement arose to add more statistics (e.g., Minimum, Maximum, or Standard Deviation), the controller's code would have to be modified. The class was not "closed for modification".
+- **Why it's a violation**: If a requirement would arise to add more statistics, the controller's code would have to be modified. The class was not "closed for modification".
 - **Applied Fix**: 
     - Moved statistics logic to `GradeService.GetStatisticsAsync()`.
     - Statistics are now returned as a `GradeStatistics` DTO.
-    - New statistics can now be added to the service or via a decorator pattern without touching the controller.
+    - New statistics can now be added to the service without touching the controller.
 
 ---
 

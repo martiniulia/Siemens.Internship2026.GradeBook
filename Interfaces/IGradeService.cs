@@ -9,10 +9,3 @@ public interface IGradeService
     Task<GradeStatistics> GetStatisticsAsync();
     Task<IEnumerable<Grade>> GetTopPassingGradesAsync(int count);
 }
-
-public class GradeStatistics
-{
-    public int TotalCount { get; set; }
-    public decimal AverageScore { get; set; }
-    public DateTime CalculatedAt { get; set; }
-}
